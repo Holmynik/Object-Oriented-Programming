@@ -1,0 +1,79 @@
+#include <iostream>
+
+// Klasa reprezentująca element listy dwukierunkowej
+class ElementListy {
+public:
+    int wartosc;
+    ElementListy* poprzedni;
+    ElementListy* nastepny;
+
+    ElementListy(int wartosc) : wartosc(wartosc), poprzedni(nullptr), nastepny(nullptr) {}
+};
+
+// Klasa reprezentująca listę dwukierunkową
+class ListaDwukierunkowa {
+public:
+    ListaDwukierunkowa() : pierwszy(nullptr), ostatni(nullptr) {}
+
+    // Dodaje nowy element na koniec listy
+    void dodaj(int wartosc) {
+        ElementListy* nowyElement = new ElementListy(wartosc);
+        if (pierwszy == nullptr) {
+            pierwszy = nowyElement;
+            ostatni = nowyElement;
+        } else {
+            nowyElement->poprzedni = ostatni;
+            ostatni->nastepny = nowyElement;
+            ostatni = nowyElement;
+        }
+    }
+
+    // Wyświetla zawartość listy w przód
+    void wyswietlPrzod() const {
+        ElementListy* obecny = pierwszy;
+        while (obecny != nullptr) {
+            std::cout << obecny->wartosc << " ";
+            obecny = obecny->nastepny;
+        }
+        std::cout << std::endl;
+    }
+
+    // Wyświetla zawartość listy w tył
+    void wyswietlTyl() const {
+        ElementListy* obecny = ostatni;
+        while (obecny != nullptr) {
+            std::cout << obecny->wartosc << " ";
+            obecny = obecny->poprzedni;
+        }
+        std::cout << std::endl;
+    }
+
+    // Usuwa wszystkie elementy z listy
+    void wyczysc() {
+        while (pierwszy != nullptr) {
+            ElementListy* tmp = pierwszy;
+            pierwszy = pierwszy->nastepny;
+            delete tmp;
+        }
+        ostatni = nullptr;
+    }
+
+private:
+    ElementListy* pierwszy;
+    ElementListy* ostatni;
+};
+
+int main() {
+    ListaDwukierunkowa lista;
+
+    lista.dodaj(1);
+    lista.dodaj(2);
+    lista.dodaj(3);
+
+    lista.wyswietlPrzod(); // Wyświetla zawartość listy od pierwszego do ostatniego elementu
+    lista.wyswietlTyl(); // Wyświetla zawartość listy od ostatniego do pierwszego elementu
+
+    lista.wyczysc();
+
+    return 0;
+}
