@@ -1,0 +1,74 @@
+#include <iostream>
+#include <queue>
+
+class Kolejka {
+public:
+    // Dodaje element na koniec kolejki
+    void enqueue(int element) {
+        kolejka.push(element);
+    }
+
+    // Usuwa i zwraca pierwszy element z kolejki
+    bool dequeue(int& element) {
+        if (kolejka.empty()) {
+            return false;
+        }
+        element = kolejka.front();
+        kolejka.pop();
+        return true;
+    }
+
+    // Zwraca pierwszy element kolejki bez usuwania
+    bool front(int& element) const {
+        if (kolejka.empty()) {
+            return false;
+        }
+        element = kolejka.front();
+        return true;
+    }
+
+    // Sprawdza, czy kolejka jest pusta
+    bool empty() const {
+        return kolejka.empty();
+    }
+
+    // Zwraca liczbę elementów w kolejce
+    size_t size() const {
+        return kolejka.size();
+    }
+
+private:
+    std::queue<int> kolejka; // Wewnętrzna reprezentacja kolejki
+};
+
+int main() {
+    Kolejka kolejkaLiczb; // Tworzenie kolejki dla liczb całkowitych
+
+    // Dodawanie elementów do kolejki
+    kolejkaLiczb.enqueue(10);
+    kolejkaLiczb.enqueue(20);
+    kolejkaLiczb.enqueue(30);
+
+    int element;
+
+    // Wyświetlanie pierwszego elementu w kolejce
+    if (kolejkaLiczb.front(element)) {
+        std::cout << "Pierwszy element kolejki: " << element << std::endl;
+    } else {
+        std::cout << "Kolejka jest pusta!" << std::endl;
+    }
+
+    // Usuwanie elementów z kolejki i wyświetlanie ich
+    while (kolejkaLiczb.dequeue(element)) {
+        std::cout << "Usuwam z kolejki: " << element << std::endl;
+    }
+
+    // Sprawdzenie, czy kolejka jest pusta
+    if (kolejkaLiczb.empty()) {
+        std::cout << "Kolejka jest pusta!" << std::endl;
+    } else {
+        std::cout << "Kolejka nie jest pusta!" << std::endl;
+    }
+
+    return 0;
+}
