@@ -1,0 +1,80 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <map>
+#include <numeric> // do std::accumulate
+
+// Klasa reprezentująca przedmiot
+class Przedmiot {
+public:
+    Przedmiot(const std::string& nazwa) : nazwaPrzedmiotu(nazwa) {}
+    
+    // Dodaje ocenę do listy ocen
+    void dodajOcene(int ocena) {
+        oceny.push_back(ocena);
+    }
+    
+    // Oblicza średnią ocen
+    double obliczSrednia() const {
+        if (oceny.empty()) {
+            return 0.0;
+        }
+        double suma = std::accumulate(oceny.begin(), oceny.end(), 0);
+        return suma / oceny.size();
+    }
+    
+    // Zwraca nazwę przedmiotu
+    const std::string& pobierzNazwe() const {
+        return nazwaPrzedmiotu;
+    }
+    
+private:
+    std::string nazwaPrzedmiotu; // Nazwa przedmiotu
+    std::vector<int> oceny;      // Lista ocen
+};
+
+// Funkcja do wczytywania danych z pliku
+std::map<std::string, Przedmiot> wczytajOceny(const std::string& nazwaPliku) {
+    std::map<std::string, Przedmiot> przedmioty;
+    std::ifstream plik(nazwaPliku);
+    
+    if (!plik) {
+        std::cerr << "Nie można otworzyć pliku: " << nazwaPliku << std::endl;
+        return przedmioty;
+    }
+    
+    std::string linia;
+    Przedmiot* aktualnyPrzedmiot = nullptr;
+    
+    while (std::getline(plik, linia)) {
+        if (linia.empty()) {
+            continue;
+        }
+        
+        if (isdigit(linia[0])) {
+            if (aktualnyPrzedmiot) {
+                aktualnyPrzedmiot->dodajOcene(std::stoi(linia));
+            }
+        } else {
+            if (przedmioty.find(linia) == przedmioty.end()) {
+                przedmioty[linia] = Przedmiot(linia);
+            }
+            aktualnyPrzedmiot = &przedmioty[linia];
+        }
+    }
+    
+    return przedmioty;
+}
+
+int main() {
+    // Wczytanie ocen z pliku
+    std::map<std::string, Przedmiot> przedmioty = wczytajOceny("oceny.txt");
+    
+    // Obliczenie i wyświetlenie średnich ocen dla każdego przedmiotu
+    for (const auto& [nazwa, przedmiot] : przedmioty) {
+        std::cout << "Srednia dla przedmiotu " << nazwa << ": " << przedmiot.obliczSrednia() << std::endl;
+    }
+    
+    return 0;
+}
