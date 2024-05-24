@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+
+// Klasa reprezentująca stos
+class Stos {
+public:
+    // Dodaje element na szczyt stosu
+    void push(double element) {
+        dane.push_back(element);
+    }
+
+    // Usuwa i zwraca element ze szczytu stosu
+    bool pop(double& element) {
+        if (dane.empty()) {
+            return false;
+        }
+        element = dane.back();
+        dane.pop_back();
+        return true;
+    }
+
+    // Zwraca element ze szczytu stosu bez usuwania
+    bool top(double& element) const {
+        if (dane.empty()) {
+            return false;
+        }
+        element = dane.back();
+        return true;
+    }
+
+    // Sprawdza, czy stos jest pusty
+    bool empty() const {
+        return dane.empty();
+    }
+
+private:
+    std::vector<double> dane; // Wewnętrzna reprezentacja stosu
+};
+
+int main() {
+    Stos stosLiczbowy; // Tworzenie stosu dla liczb
+
+    // Dodawanie elementów na stos
+    stosLiczbowy.push(3.14);
+    stosLiczbowy.push(2.718);
+    stosLiczbowy.push(1.618);
+
+    double wartosc;
+
+    // Wyświetlanie elementu na szczycie stosu
+    if (stosLiczbowy.top(wartosc)) {
+        std::cout << "Na szczycie stosu jest liczba: " << wartosc << std::endl;
+    } else {
+        std::cout << "Stos jest pusty!" << std::endl;
+    }
+
+    // Usuwanie elementów ze stosu i wyświetlanie ich
+    while (stosLiczbowy.pop(wartosc)) {
+        std::cout << "Usuwam ze stosu liczbe: " << wartosc << std::endl;
+    }
+
+    // Sprawdzenie, czy stos jest pusty
+    if (stosLiczbowy.empty()) {
+        std::cout << "Stos jest pusty!" << std::endl;
+    } else {
+        std::cout << "Stos nie jest pusty!" << std::endl;
+    }
+
+    return 0;
+}
