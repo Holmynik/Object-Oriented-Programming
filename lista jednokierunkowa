@@ -1,0 +1,73 @@
+#include <iostream>
+
+// Klasa reprezentująca element listy jednokierunkowej
+class ElementListy {
+public:
+    int wartosc; // Wartość przechowywana w elemencie
+    ElementListy* nastepny; // Wskaźnik na następny element
+
+    // Konstruktor inicjujący wartość i wskaźnik na nullptr
+    ElementListy(int wartosc) : wartosc(wartosc), nastepny(nullptr) {}
+};
+
+// Klasa reprezentująca listę jednokierunkową
+class ListaJednokierunkowa {
+public:
+    // Konstruktor tworzący pustą listę
+    ListaJednokierunkowa() : pierwszy(nullptr), ostatni(nullptr) {}
+
+    // Dodaje nowy element na koniec listy
+    void dodaj(int wartosc) {
+        ElementListy* nowyElement = new ElementListy(wartosc);
+        if (pierwszy == nullptr) {
+            // Jeśli lista jest pusta, nowy element staje się zarówno pierwszym, jak i ostatnim elementem
+            pierwszy = nowyElement;
+            ostatni = nowyElement;
+        } else {
+            // W przeciwnym razie dodajemy nowy element na koniec listy i aktualizujemy wskaźnik na ostatni element
+            ostatni->nastepny = nowyElement;
+            ostatni = nowyElement;
+        }
+    }
+
+    // Wyświetla zawartość listy
+    void wyswietl() const {
+        ElementListy* obecny = pierwszy;
+        while (obecny != nullptr) {
+            std::cout << obecny->wartosc << " ";
+            obecny = obecny->nastepny;
+        }
+        std::cout << std::endl;
+    }
+
+    // Usuwa wszystkie elementy z listy
+    void wyczysc() {
+        while (pierwszy != nullptr) {
+            ElementListy* tmp = pierwszy;
+            pierwszy = pierwszy->nastepny;
+            delete tmp;
+        }
+        ostatni = nullptr;
+    }
+
+private:
+    ElementListy* pierwszy; // Wskaźnik na pierwszy element listy
+    ElementListy* ostatni; // Wskaźnik na ostatni element listy
+};
+
+int main() {
+    ListaJednokierunkowa lista; // Tworzenie listy
+
+    // Dodawanie elementów do listy
+    lista.dodaj(51);
+    lista.dodaj(2);
+    lista.dodaj(34);
+
+    // Wyświetlanie zawartości listy
+    lista.wyswietl();
+
+    // Wyczyszczenie listy (usunięcie wszystkich elementów)
+    lista.wyczysc();
+
+    return 0;
+}
